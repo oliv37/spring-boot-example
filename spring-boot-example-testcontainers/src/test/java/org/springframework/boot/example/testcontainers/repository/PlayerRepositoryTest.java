@@ -40,7 +40,7 @@ class PlayerRepositoryTest {
         Player player = new Player("John");
 
         // when
-        Player result = playerRepository.saveAndFlush(player);
+        Player result = playerRepository.save(player);
 
         // then
         assertThat(result.getId()).isNotNull();
@@ -50,8 +50,8 @@ class PlayerRepositoryTest {
     @Test
     void testFindByName() {
         // given
-        playerRepository.saveAndFlush(new Player("John"));
-        playerRepository.saveAndFlush(new Player("Mike"));
+        playerRepository.save(new Player("John"));
+        playerRepository.save(new Player("Mike"));
 
         // when
         List<Player> result = playerRepository.findByName("Mike");

@@ -18,7 +18,8 @@
 	<modules>
 		<module>spring-boot-example-testcontainers</module>
         <module>spring-boot-example-hibernate-stream</module>
-    </modules>
+		<module>spring-boot-example-optimistic-lock</module>
+	</modules>
 
 	<properties>
 		<revision>1.0.0-SNAPSHOT</revision>
