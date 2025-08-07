@@ -7,8 +7,8 @@
         <artifactId>spring-boot-example</artifactId>
         <version>${revision}</version>
     </parent>
+
     <artifactId>spring-boot-example-testcontainers</artifactId>
-    <name>Spring Boot Example testcontainers</name>
 
     <dependencies>
         <dependency>
