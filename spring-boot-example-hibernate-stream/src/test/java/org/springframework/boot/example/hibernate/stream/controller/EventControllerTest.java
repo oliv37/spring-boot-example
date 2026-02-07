@@ -1,22 +1,24 @@
 package org.springframework.boot.example.hibernate.stream.controller;
 
-import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.client.EntityExchangeResult;
+import org.springframework.test.web.servlet.client.RestTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Testcontainers
@@ -32,41 +34,49 @@ public class EventControllerTest {
     @LocalServerPort
     Integer port;
 
+    RestTestClient client;
+
     @BeforeEach
     void setUp() {
-        RestAssured.baseURI = "http://localhost:" + port;
+        client = RestTestClient.bindToServer()
+                .baseUrl("http://localhost:" + port)
+                .build();
     }
 
     @Test
     void testGetEventIds1() {
-        given()
-                .when()
-                .get("/eventIds1")
-                .then()
-                .statusCode(200)
-                .body("$", hasSize(10_000))
-                .body("$", equalTo(IntStream.range(1, 10_000 + 1).boxed().toList()));
+        List<Integer> result = client.get().uri("/eventIds1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<List<Integer>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(result).isEqualTo(IntStream.range(1, 10_000 + 1).boxed().toList());
     }
 
     @Test
     void testGetEventIds2() {
-        given()
-                .when()
-                .get("/eventIds2")
-                .then()
-                .statusCode(200)
-                .body("$", hasSize(10_000))
-                .body("$", equalTo(IntStream.range(1, 10_000 + 1).boxed().toList()));
+        client.get().uri("/eventIds2")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$")
+                .isArray()
+                .jsonPath("$")
+                .isEqualTo(IntStream.range(1, 10_000 + 1).boxed().toList());
     }
 
     @Test
     void testGetEventIds3() {
-        given()
-                .when()
-                .get("/eventIds3")
-                .then()
-                .statusCode(200)
-                .body("$", hasSize(10_000))
-                .body("$", equalTo(IntStream.range(1, 10_000 + 1).boxed().toList()));
+        EntityExchangeResult<List<Integer>> result = client.get().uri("/eventIds2")
+                .exchange()
+                .expectBody(new ParameterizedTypeReference<List<Integer>>() {})
+                .returnResult();
+
+        assertThat(result.getStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getResponseBody())
+                .hasSize(10_000)
+                .isEqualTo(IntStream.range(1, 10_000 + 1).boxed().toList());
     }
 }

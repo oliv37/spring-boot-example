@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.3</version>
+		<version>4.0.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.springframework.boot.example</groupId>
@@ -24,8 +24,8 @@
 
 	<properties>
 		<revision>1.0.0-SNAPSHOT</revision>
-		<java.version>24</java.version>
-		<wiremock-spring-boot.version>3.10.0</wiremock-spring-boot.version>
+		<java.version>25</java.version>
+		<wiremock-spring-boot.version>4.1.0</wiremock-spring-boot.version>
 	</properties>
 
 	<dependencyManagement>

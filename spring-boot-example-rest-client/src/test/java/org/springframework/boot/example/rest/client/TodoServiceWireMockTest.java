@@ -1,13 +1,12 @@
 package org.springframework.boot.example.rest.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.example.rest.client.model.Todo;
 import org.springframework.boot.example.rest.client.model.Todos;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.wiremock.spring.EnableWireMock;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -22,13 +21,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 class TodoServiceWireMockTest {
 
     @Autowired
-    ObjectMapper mapper;
+    JsonMapper mapper;
 
     @Autowired
     TodoService todoService;
 
     @Test
-    void testFindTodos() throws JsonProcessingException {
+    void testFindTodos() {
         Todos todos = new Todos(List.of(new Todo(1L, "toto", false, "2")), 1L, 0L, 30L);
 
         stubFor(get("/todos")
