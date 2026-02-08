@@ -19,7 +19,8 @@
 		<module>spring-boot-example-testcontainers</module>
         <module>spring-boot-example-hibernate-stream</module>
 		<module>spring-boot-example-hibernate-lock</module>
-        <module>spring-boot-example-rest-client</module>
+		<module>spring-boot-example-hibernate-restriction</module>
+		<module>spring-boot-example-rest-client</module>
     </modules>
 
 	<properties>
